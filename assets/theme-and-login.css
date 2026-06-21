@@ -76,6 +76,78 @@ html[data-theme="light"] .section-head h2{
 }
 
 /* ============================================================
+   HERO THEME LOCK
+   ------------------------------------------------------------
+   The following four hero components PERMANENTLY keep their
+   dark-premium appearance regardless of active theme.
+   These rules use [data-theme="light"] scope and !important
+   to override any light-mode re-tinting.
+   ============================================================ */
+
+/* 1. Top Admissions Banner */
+html[data-theme="light"] #admBanner {
+  background: linear-gradient(90deg,rgba(48,209,88,.22),rgba(10,132,255,.22)) !important;
+  border-bottom: 1px solid rgba(255,255,255,.12) !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] #admBanner a,
+html[data-theme="light"] #admBanner span:not(.dotlive) {
+  color: #ffffff !important;
+}
+
+/* 2. Navbar Glass Container */
+html[data-theme="light"] nav#nav {
+  background: rgba(20,20,22,.45) !important;
+  border-color: rgba(255,255,255,.08) !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] nav#nav.scrolled {
+  background: rgba(10,10,12,.78) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35) !important;
+}
+html[data-theme="light"] nav#nav .navlink,
+html[data-theme="light"] nav#nav .brand {
+  color: #ffffff !important;
+}
+
+/* 3. Hero Statistics Glass Panel */
+html[data-theme="light"] #jhHeroStats,
+html[data-theme="light"] .hero-stats {
+  background: var(--line) !important;
+  border-color: var(--line) !important;
+}
+html[data-theme="light"] #jhHeroStats .stat,
+html[data-theme="light"] .hero-stats .stat {
+  background: rgba(255,255,255,.025) !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] #jhHeroStats .stat-num,
+html[data-theme="light"] .hero-stats .stat-num {
+  color: #ffffff !important;
+}
+html[data-theme="light"] #jhHeroStats .stat-lbl,
+html[data-theme="light"] .hero-stats .stat-lbl {
+  color: rgba(255,255,255,.55) !important;
+}
+
+/* 4. Hero CTA Area */
+html[data-theme="light"] .hero-ctas .btn-primary {
+  background: var(--blue) !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] .hero-ctas .btn-secondary {
+  background: rgba(255,255,255,.08) !important;
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+html[data-theme="light"] .hero-ctas .btn-gold {
+  background: rgba(212,168,87,.18) !important;
+  color: var(--gold) !important;
+  border-color: rgba(212,168,87,.35) !important;
+}
+
+/* ============================================================
    THEME TOGGLE — premium glass pill, top-left of navbar
    ============================================================ */
 .theme-toggle{
@@ -218,3 +290,78 @@ html[data-theme="light"] .login-dd-menu{
   .login-dd-btn{padding:7px 11px;}
   .login-dd-menu{right:-6px; min-width:188px;}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   JAMIA HIFZ PLUS — THEME PATCH ADDENDUM
+   Reinforces locked sections and improves light mode premium feel.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* FORCE LOCK: hero stats, banner, and nav always dark regardless of theme */
+html[data-theme="light"] #admBanner {
+  background: linear-gradient(90deg, rgba(7,26,56,.96), rgba(3,13,31,.94)) !important;
+  border-bottom: 1px solid rgba(212,168,87,.22) !important;
+  color: rgba(245,245,247,.95) !important;
+}
+html[data-theme="light"] #admBanner a,
+html[data-theme="light"] #admBanner span:not(.dotlive) {
+  color: rgba(245,245,247,.9) !important;
+}
+html[data-theme="light"] #admBanner a { color: #7ed6a0 !important; }
+
+html[data-theme="light"] #jhHeroStats {
+  background: rgba(3,13,31,.82) !important;
+  border: 1px solid rgba(212,168,87,.25) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+}
+html[data-theme="light"] .stat .num { color: #f0c96a !important; }
+html[data-theme="light"] .stat .lab { color: rgba(245,245,247,.65) !important; }
+
+/* Light mode navbar — keep dark glass */
+html[data-theme="light"] nav#nav {
+  background: rgba(3,13,31,.68) !important;
+  border-color: rgba(212,168,87,.2) !important;
+}
+html[data-theme="light"] nav#nav.scrolled {
+  background: rgba(3,13,31,.88) !important;
+}
+html[data-theme="light"] .navlinks a { color: rgba(245,245,247,.8) !important; }
+html[data-theme="light"] .navlinks a:hover { color: #f0c96a !important; }
+html[data-theme="light"] .brand-name {
+  background: linear-gradient(135deg, #f0c96a 0%, #d4a857 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* Light mode — better page background */
+html[data-theme="light"] body { background: #eef2f9; }
+html[data-theme="light"] .section-head h2 {
+  background: linear-gradient(170deg, #0a1628 30%, #1565c0 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+html[data-theme="light"] .glass-card {
+  background: rgba(255,255,255,.8) !important;
+  border-color: rgba(10,34,87,.07) !important;
+  box-shadow: 0 4px 24px rgba(10,34,87,.07), inset 0 1px 0 rgba(255,255,255,.95) !important;
+}
+html[data-theme="light"] .glass-card:hover {
+  background: rgba(255,255,255,.95) !important;
+  border-color: rgba(184,134,15,.2) !important;
+  box-shadow: 0 12px 40px rgba(10,34,87,.1), 0 0 20px rgba(184,134,15,.05) !important;
+}
+html[data-theme="light"] footer {
+  background: linear-gradient(180deg, #030d1f, #000) !important;
+  border-top: 1px solid rgba(212,168,87,.15) !important;
+}
+
+/* Login dropdown — light mode fix */
+html[data-theme="light"] .login-dd-menu {
+  background: rgba(3,13,31,.92) !important;
+  border-color: rgba(212,168,87,.25) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.3) !important;
+}
+html[data-theme="light"] .login-dd-menu a { color: rgba(245,245,247,.85) !important; }
+html[data-theme="light"] .login-dd-menu a:hover { color: #f0c96a !important; }
