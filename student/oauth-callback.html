@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signing in… — JH+ Shaheen Academy</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="../assets/portal-login.css">
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-card" style="text-align:center;">
+    <div class="login-logo">
+      <div class="mark">J</div>
+      <div class="brandname">JH<span>+</span> Shaheen Academy</div>
+    </div>
+    <div id="loginMsg" class="login-msg show" style="background:rgba(212,168,87,.1);border:1px solid rgba(212,168,87,.3);color:#e8c789;">
+      <span class="spin" style="border-top-color:#e8c789;border-color:rgba(232,199,137,.3);"></span>
+      Completing sign-in…
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>
+(async function () {
+  const EXPECTED_ROLE = "student";
+  const msgEl = document.getElementById("loginMsg");
+
+  function fail(text) {
+    msgEl.className = "login-msg show error";
+    msgEl.textContent = text;
+    setTimeout(() => { window.location.href = "login.html"; }, 2500);
+  }
+
+  // Supabase JS SDK automatically parses the OAuth redirect hash/query
+  // and establishes the session — we just need to wait for it, then
+  // check (or create) the profile row and route by role.
+  const session = await jhGetSession();
+
+  if (!session) {
+    fail("Sign-in did not complete. Redirecting back to login…");
+    return;
+  }
+
+  let { data: profile, error } = await sb
+    .from("profiles")
+    .select("*")
+    .eq("id", session.user.id)
+    .single();
+
+  // First-ever Google login for this user: no profile row yet.
+  // Create one as a pending Student account — an admin/super-admin
+  // must assign/confirm the role before portal access is granted.
+  if (!profile) {
+    const { data: created, error: insertError } = await sb
+      .from("profiles")
+      .insert({
+        id: session.user.id,
+        email: session.user.email,
+        full_name: session.user.user_metadata?.full_name || session.user.email,
+        role: "student",
+        status: "pending",
+        must_change_password: false,
+        auth_provider: "google",
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      fail("Could not create your profile. Please contact an administrator.");
+      return;
+    }
+    profile = created;
+  }
+
+  if (profile.role !== EXPECTED_ROLE) {
+    fail(`This Google account is registered as ${profile.role.replace("_"," ")}, not student. Use the correct portal.`);
+    return;
+  }
+
+  if (profile.status === "pending") {
+    fail("Your account is pending approval. Please contact an administrator.");
+    return;
+  }
+
+  if (profile.must_change_password) {
+    window.location.href = "force-password-change.html";
+    return;
+  }
+
+  window.location.href = JH_ROLE_HOME[EXPECTED_ROLE] || "/index.html";
+})();
+</script>
+</body>
+</html>

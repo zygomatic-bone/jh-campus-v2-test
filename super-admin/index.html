@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Admin — JH+ Shaheen Academy</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/portal-shell.css">
+</head>
+<body>
+
+<div class="jh-sidebar-overlay" id="jhSidebarOverlay"></div>
+
+<aside class="jh-sidebar" id="jhSidebar">
+  <div class="jh-sidebar-brand">
+    <div class="mark">J</div>
+    <div>
+      <div class="label">JH<span>+</span> Shaheen</div>
+      <div class="tag">Super Admin</div>
+    </div>
+  </div>
+
+  <nav class="jh-nav">
+    <button class="jh-nav-link active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      Dashboard
+    </button>
+    <div class="jh-nav-section">Users</div>
+    <button class="jh-nav-link" data-view="users">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><circle cx="17" cy="7" r="3"/><path d="M21 21v-2a3.7 3.7 0 0 0-2.5-3.5"/></svg>
+      User Management
+    </button>
+    <button class="jh-nav-link" data-view="academic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Classes &amp; Sections
+    </button>
+    <div class="jh-nav-section">Website CMS</div>
+    <button class="jh-nav-link" data-view="sections">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Section Builder
+    </button>
+    <button class="jh-nav-link" data-view="media">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+      Media Library
+    </button>
+    <div class="jh-nav-section">System</div>
+    <button class="jh-nav-link" data-view="logs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+      Logs
+    </button>
+    <button class="jh-nav-link" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      Settings
+    </button>
+    <div class="jh-nav-section">Account</div>
+    <button class="jh-nav-link" data-view="profile">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      Profile
+    </button>
+  </nav>
+
+  <div class="jh-sidebar-foot">
+    <div class="avatar" id="jhUserAvatar">?</div>
+    <div class="who">
+      <div class="n" id="jhUserName">Loading…</div>
+      <div class="r" id="jhUserRole">super admin</div>
+    </div>
+    <button class="logout-btn" id="jhLogoutBtn" title="Sign out">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+    </button>
+  </div>
+</aside>
+
+<main class="jh-main">
+  <div class="jh-topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="jh-mobile-toggle" id="jhMobileToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div>
+        <h1 id="viewTitle">Dashboard</h1>
+        <div class="sub" id="viewSub">Full system control.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="viewContent">
+    <div class="jh-loading"><div class="jh-spin"></div></div>
+  </div>
+</main>
+
+<!-- FLOATING + CONTENT WIZARD -->
+<button id="jhFab" class="jh-fab" title="Quick actions" aria-label="Open quick actions">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
+<div id="jhWizardOverlay" class="jh-wizard-overlay">
+  <div class="jh-wizard-box" id="jhWizardBox">
+    <!-- populated by wizard.js -->
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script src="../assets/js/portal-shell.js"></script>
+<script src="../assets/js/image-pipeline.js"></script>
+<script src="assets/super-admin-portal.js"></script>
+<script src="assets/content-wizard.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trust Portal — JH+ Shaheen Academy</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/portal-shell.css">
+</head>
+<body>
+
+<div class="jh-sidebar-overlay" id="jhSidebarOverlay"></div>
+
+<aside class="jh-sidebar" id="jhSidebar">
+  <div class="jh-sidebar-brand">
+    <div class="mark">J</div>
+    <div>
+      <div class="label">JH<span>+</span> Shaheen</div>
+      <div class="tag">Trust Portal</div>
+    </div>
+  </div>
+
+  <nav class="jh-nav">
+    <button class="jh-nav-link active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      Dashboard
+    </button>
+    <button class="jh-nav-link" data-view="reports">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M3 4h18l-1.5 9.5a2 2 0 0 1-2 1.5H6.5a2 2 0 0 1-2-1.5L3 4Z"/></svg>
+      Reports
+    </button>
+    <button class="jh-nav-link" data-view="analytics">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-4"/></svg>
+      Analytics
+    </button>
+    <button class="jh-nav-link" data-view="users">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><circle cx="17" cy="7" r="3"/><path d="M21 21v-2a3.7 3.7 0 0 0-2.5-3.5"/></svg>
+      Users
+    </button>
+    <div class="jh-nav-section">Account</div>
+    <button class="jh-nav-link" data-view="profile">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      Profile
+    </button>
+  </nav>
+
+  <div class="jh-sidebar-foot">
+    <div class="avatar" id="jhUserAvatar">?</div>
+    <div class="who">
+      <div class="n" id="jhUserName">Loading…</div>
+      <div class="r" id="jhUserRole">trust_member</div>
+    </div>
+    <button class="logout-btn" id="jhLogoutBtn" title="Sign out">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+    </button>
+  </div>
+</aside>
+
+<main class="jh-main">
+  <div class="jh-topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="jh-mobile-toggle" id="jhMobileToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div>
+        <h1 id="viewTitle">Dashboard</h1>
+        <div class="sub" id="viewSub">Welcome back — here's your overview.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="viewContent">
+    <div class="jh-loading"><div class="jh-spin"></div></div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script src="../assets/js/portal-shell.js"></script>
+<script src="assets/trust-portal.js"></script>
+</body>
+</html>
