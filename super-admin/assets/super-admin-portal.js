@@ -251,36 +251,52 @@ async function renderUsers(content) {
     btn.disabled = true; btn.textContent = "Creating…";
     msgEl.style.display = "none";
 
-    /* Create auth user via signUp (anon key). Supabase emails a confirm link. */
-    const { data: authData, error: authErr } = await sb.auth.signUp({
-      email, password: pw,
-      options: { data: { full_name: name } }
-    });
+    /* ------------------------------------------------------------
+       IMPORTANT: This calls a server-side Edge Function, NOT
+       sb.auth.signUp(). signUp() signs the CURRENT BROWSER in as
+       the newly created user, which would log the Super Admin out
+       of their own session every time they create someone — that
+       was the previous (broken) behavior here.
 
-    if (authErr) {
-      showMsg(msgEl, "Auth error: " + authErr.message, false);
+       The Edge Function uses the service-role key (server-side
+       only) to call the Admin API instead, which creates the auth
+       user AND the profile row without affecting the caller's
+       session at all. See:
+       /supabase/functions/admin-create-user/index.ts
+       ------------------------------------------------------------ */
+    const { data: sessionData } = await sb.auth.getSession();
+    const accessToken = sessionData?.session?.access_token;
+
+    if (!accessToken) {
+      showMsg(msgEl, "Your session has expired — please refresh and log in again.", false);
       btn.disabled = false; btn.textContent = "Create Account";
       return;
     }
 
-    const newUserId = authData?.user?.id;
-    if (newUserId) {
-      /* Upsert profile row immediately so role is set before first login. */
-      const { error: profErr } = await sb.from("profiles").upsert({
-        id: newUserId, email, full_name: name, role, status: "active"
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/admin-create-user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ name, email, password: pw, role }),
       });
-      if (profErr) { showMsg(msgEl, "Account created but profile error: " + profErr.message, false); }
-      else {
-        await logActivity("user.created", "profiles", newUserId, { role, email });
-        showMsg(msgEl, `✅ Account created for ${name}. A confirmation email has been sent to ${email}.`, true);
-        document.getElementById("cuName").value = "";
-        document.getElementById("cuEmail").value = "";
-        document.getElementById("cuPassword").value = "";
-        setTimeout(() => renderUsers(content), 1800);
+      const result = await res.json();
+
+      if (!res.ok || result.error) {
+        showMsg(msgEl, result.error || "Failed to create account.", false);
+        btn.disabled = false; btn.textContent = "Create Account";
+        return;
       }
-    } else {
-      /* Email confirmation required — profile row inserted by DB trigger on confirm */
-      showMsg(msgEl, `✅ Invite sent to ${email}. They must confirm their email before logging in. Role will be set to "${role.replace(/_/g," ")}" — you can adjust it below once the account appears.`, true);
+
+      showMsg(msgEl, `✅ Account created for ${name} (${role.replace(/_/g," ")}). They must change their password on first login.`, true);
+      document.getElementById("cuName").value = "";
+      document.getElementById("cuEmail").value = "";
+      document.getElementById("cuPassword").value = "";
+      setTimeout(() => renderUsers(content), 1800);
+    } catch (err) {
+      showMsg(msgEl, "Network error contacting admin-create-user function: " + err.message, false);
     }
     btn.disabled = false; btn.textContent = "Create Account";
   });
