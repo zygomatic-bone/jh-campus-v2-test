@@ -1,0 +1,52 @@
+/* ═══════════════════════════════════════════════════════════════════
+   JAMIA HIFZ PLUS — PORTAL LOGIN PREMIUM PATCH
+   Drop into each portal/assets/ folder and link from login.html
+   before the existing portal CSS.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --navy-deep: #030d1f;
+  --navy: #0a2257;
+  --ocean: #0d3a8a;
+  --gold: #d4a857;
+  --gold-bright: #f0c96a;
+}
+
+/* Full-page premium dark background */
+body {
+  background: radial-gradient(ellipse 120% 100% at 50% 0%,
+    #071a38 0%, #030d1f 50%, #000 100%) !important;
+  min-height: 100vh;
+}
+
+/* Portal sidebar brand area */
+.sidebar-brand,
+.portal-logo,
+.brand-area {
+  background: transparent !important;
+}
+
+/* Sidebar label text */
+.label {
+  background: linear-gradient(135deg, #f0c96a 0%, #d4a857 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  letter-spacing: .06em;
+}
+
+/* Login card glass effect */
+.login-card,
+.auth-card,
+.portal-card {
+  background: rgba(7, 26, 56, .55) !important;
+  border: 1px solid rgba(212, 168, 87, .2) !important;
+  backdrop-filter: blur(28px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+  box-shadow:
+    0 1px 0 rgba(212, 168, 87, .12) inset,
+    0 24px 80px rgba(0, 0, 0, .5),
+    0 0 100px rgba(13, 58, 138, .2) !important;
+  border-radius: 24px !important;
+}
