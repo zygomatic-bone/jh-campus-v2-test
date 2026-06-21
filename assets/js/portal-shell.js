@@ -27,7 +27,7 @@ function jhInitShell(profile) {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
       const role = profile.role === "super_admin" ? "super-admin" : profile.role;
-      await jhLogout(`${window.JH_SITE_ROOT}${role}/login.html`);
+      await jhLogout(`/${role}/login.html`);
     });
   }
 

@@ -16,8 +16,8 @@
 // Add this script tag BEFORE this file in every page that needs auth:
 // <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-const SUPABASE_URL = "https://yzieordrammibycnjtkr.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6aWVvcmRyYW1taWJ5Y25qdGtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5ODEyMDMsImV4cCI6MjA5NzU1NzIwM30.aGzcUlLUWGLUqU3CbyPoJAMDhzdwLUnBMCLU2AwCxAQ";
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
 // Guard so this file can be safely included multiple times.
 if (typeof window.supabaseClient === "undefined") {
@@ -41,28 +41,6 @@ if (typeof window.supabaseClient === "undefined") {
 const sb = window.supabaseClient;
 
 /* ============================================================
-   SITE ROOT (works at a domain root OR inside a subfolder, e.g.
-   GitHub Pages project sites like /jh-campus-v2-test/)
-   ------------------------------------------------------------
-   This file is loaded from pages at different folder depths
-   (root, and one level deep inside each portal folder), so a
-   single hardcoded "/" or "../" prefix can't work everywhere.
-   Instead we ask the browser where THIS script was actually
-   loaded from, and derive every other path from that. Moving
-   the whole site to a custom domain root later needs zero edits.
-   ============================================================ */
-const JH_SITE_ROOT = (function () {
-  const scriptEl =
-    document.currentScript ||
-    Array.from(document.getElementsByTagName("script")).find((s) =>
-      s.src.includes("assets/js/supabase-config.js")
-    );
-  if (!scriptEl) return "/"; // shouldn't happen, but fail safe
-  return scriptEl.src.replace(/assets\/js\/supabase-config\.js.*$/, "");
-})();
-window.JH_SITE_ROOT = JH_SITE_ROOT;
-
-/* ============================================================
    ROLE CONSTANTS
    ============================================================ */
 const JH_ROLES = Object.freeze({
@@ -76,22 +54,22 @@ const JH_ROLES = Object.freeze({
 
 // Maps each role to its portal home page.
 const JH_ROLE_HOME = Object.freeze({
-  student: JH_SITE_ROOT + "student/index.html",
-  teacher: JH_SITE_ROOT + "teacher/index.html",
-  principal: JH_SITE_ROOT + "principal/index.html",
-  trust_member: JH_SITE_ROOT + "trust/index.html",
-  admin: JH_SITE_ROOT + "admin/index.html",
-  super_admin: JH_SITE_ROOT + "super-admin/index.html",
+  student: "/student/index.html",
+  teacher: "/teacher/index.html",
+  principal: "/principal/index.html",
+  trust_member: "/trust/index.html",
+  admin: "/admin/index.html",
+  super_admin: "/super-admin/index.html",
 });
 
 // Maps each role to its login page (used for redirects on logout / denied access).
 const JH_ROLE_LOGIN = Object.freeze({
-  student: JH_SITE_ROOT + "student/login.html",
-  teacher: JH_SITE_ROOT + "teacher/login.html",
-  principal: JH_SITE_ROOT + "principal/login.html",
-  trust_member: JH_SITE_ROOT + "trust/login.html",
-  admin: JH_SITE_ROOT + "admin/login.html",
-  super_admin: JH_SITE_ROOT + "super-admin/login.html",
+  student: "/student/login.html",
+  teacher: "/teacher/login.html",
+  principal: "/principal/login.html",
+  trust_member: "/trust/login.html",
+  admin: "/admin/login.html",
+  super_admin: "/super-admin/login.html",
 });
 
 /* ============================================================
@@ -193,7 +171,7 @@ async function jhSendPasswordReset(email, redirectTo) {
   if (!sb) return { success: false, error: "Supabase not initialized." };
 
   const { error } = await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: redirectTo || JH_SITE_ROOT + "reset-password.html",
+    redirectTo: redirectTo || window.location.origin + "/reset-password.html",
   });
 
   if (error) return { success: false, error: error.message };
@@ -228,7 +206,7 @@ async function jhUpdatePassword(newPassword) {
  */
 async function jhLogout(redirectTo) {
   if (sb) await sb.auth.signOut();
-  window.location.href = redirectTo || JH_SITE_ROOT + "index.html";
+  window.location.href = redirectTo || "/index.html";
 }
 
 /* ============================================================
@@ -255,7 +233,7 @@ async function authGuard(allowedRoles) {
   if (!session) {
     const fallbackLogin = allowedRoles && allowedRoles[0]
       ? JH_ROLE_LOGIN[allowedRoles[0]]
-      : JH_SITE_ROOT + "index.html";
+      : "/index.html";
     window.location.href = fallbackLogin;
     return null;
   }
@@ -268,7 +246,7 @@ async function authGuard(allowedRoles) {
   }
 
   if (Array.isArray(allowedRoles) && !allowedRoles.includes(profile.role)) {
-    window.location.href = JH_SITE_ROOT + "access-denied.html";
+    window.location.href = "/access-denied.html";
     return null;
   }
 
@@ -276,7 +254,7 @@ async function authGuard(allowedRoles) {
   const onForcedResetPage = window.location.pathname.includes("force-password-change");
   if (profile.must_change_password && !onForcedResetPage) {
     const role = profile.role;
-    window.location.href = `${JH_SITE_ROOT}${role === "super_admin" ? "super-admin" : role}/force-password-change.html`;
+    window.location.href = `/${role === "super_admin" ? "super-admin" : role}/force-password-change.html`;
     return null;
   }
 
@@ -297,9 +275,9 @@ async function jhRedirectIfLoggedIn() {
 
   if (profile.must_change_password) {
     const role = profile.role;
-    window.location.href = `${JH_SITE_ROOT}${role === "super_admin" ? "super-admin" : role}/force-password-change.html`;
+    window.location.href = `/${role === "super_admin" ? "super-admin" : role}/force-password-change.html`;
     return;
   }
 
-  window.location.href = JH_ROLE_HOME[profile.role] || JH_SITE_ROOT + "index.html";
+  window.location.href = JH_ROLE_HOME[profile.role] || "/index.html";
 }

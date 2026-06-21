@@ -99,7 +99,7 @@
         if (result.profile.must_change_password) {
           window.location.href = `force-password-change.html`;
         } else {
-          window.location.href = JH_ROLE_HOME[ROLE] || (window.JH_SITE_ROOT + "index.html");
+          window.location.href = JH_ROLE_HOME[ROLE] || "/index.html";
         }
       });
     }
