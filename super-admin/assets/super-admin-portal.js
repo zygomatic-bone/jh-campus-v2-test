@@ -97,282 +97,63 @@ function formatBytes(bytes) {
 }
 
 /* ---------------------------------------------------------- */
-/* ---------------------------------------------------------- */
-/* USER MANAGEMENT — full CRUD without opening Supabase       */
-/* ---------------------------------------------------------- */
-
-const JH_ROLES_LIST = ["student","teacher","principal","trust_member","admin","super_admin"];
-
-function roleBadge(role) {
-  const colors = { student:"#0a84ff", teacher:"#30d158", principal:"#d4a857", trust_member:"#bf5af2", admin:"#ff9f0a", super_admin:"#ff453a" };
-  return `<span style="display:inline-block;padding:2px 8px;border-radius:980px;font-size:11px;font-weight:600;background:${colors[role]||"#555"}22;color:${colors[role]||"#ccc"};border:1px solid ${colors[role]||"#555"}44;">${(role||"").replace(/_/g," ")}</span>`;
-}
-
-function statusBadge(status) {
-  if (status === "active")  return '<span class="jh-badge jh-badge-green">Active</span>';
-  if (status === "pending") return '<span class="jh-badge jh-badge-gold">Pending</span>';
-  return '<span class="jh-badge jh-badge-gray">Inactive</span>';
-}
-
 async function renderUsers(content) {
-  const { data: users, error } = await sb.from("profiles").select("*").order("created_at", { ascending: false });
-  if (error) { content.innerHTML = `<div class="jh-card" style="color:var(--red);">Error loading users: ${escapeHtml(error.message)}</div>`; return; }
+  const { data: users } = await sb.from("profiles").select("*").order("created_at", { ascending: false });
 
   content.innerHTML = `
-    <!-- ── CREATE USER ─────────────────────────────────── -->
-    <div class="jh-card" style="margin-bottom:20px;">
-      <div class="jh-section-title" style="margin-bottom:14px;">Create User</div>
-      <div id="createUserMsg" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:10px;font-size:13px;"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div>
-          <label style="font-size:12px;color:var(--text-faint);display:block;margin-bottom:4px;">Full Name *</label>
-          <input id="cuName" class="login-input" placeholder="e.g. Ahmed Khan" style="width:100%;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:12px;color:var(--text-faint);display:block;margin-bottom:4px;">Email Address *</label>
-          <input id="cuEmail" class="login-input" type="email" placeholder="user@example.com" style="width:100%;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:12px;color:var(--text-faint);display:block;margin-bottom:4px;">Password *</label>
-          <input id="cuPassword" class="login-input" type="password" placeholder="Min 8 characters" style="width:100%;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:12px;color:var(--text-faint);display:block;margin-bottom:4px;">Role *</label>
-          <select id="cuRole" class="login-input" style="width:100%;box-sizing:border-box;">
-            ${JH_ROLES_LIST.map(r=>`<option value="${r}">${r.replace(/_/g," ")}</option>`).join("")}
-          </select>
-        </div>
-      </div>
-      <div style="margin-top:14px;display:flex;gap:10px;align-items:center;">
-        <button id="cuSubmitBtn" class="jh-btn jh-btn-primary" style="padding:9px 22px;">Create Account</button>
-        <span style="font-size:12px;color:var(--text-faint);">A confirmation email will be sent to the user.</span>
-      </div>
+    <div class="jh-card" style="max-width:640px;margin-bottom:20px;">
+      <div class="jh-section-title">Create User</div>
+      <p style="color:var(--text-faint);font-size:12px;margin-bottom:14px;">
+        New accounts must be created via Supabase Auth (Dashboard → Authentication → Add User) for security —
+        passwords are never set through this interface. After creating the auth user, assign their role here.
+      </p>
     </div>
-
-    <!-- ── PENDING APPROVALS ───────────────────────────── -->
-    ${(users||[]).filter(u=>u.status==="pending").length ? `
-    <div class="jh-card" style="margin-bottom:20px;border:1px solid rgba(212,168,87,.3);">
-      <div class="jh-section-title" style="margin-bottom:12px;color:var(--gold);">⏳ Pending Approvals (${(users||[]).filter(u=>u.status==="pending").length})</div>
-      <table class="jh-table">
-        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
-        <tbody>
-          ${(users||[]).filter(u=>u.status==="pending").map(u=>`
-          <tr>
-            <td>${escapeHtml(u.full_name||"—")}</td>
-            <td>${escapeHtml(u.email||"—")}</td>
-            <td>${roleBadge(u.role)}</td>
-            <td>
-              <button class="jh-btn jh-btn-primary approve-btn" data-id="${u.id}" style="padding:5px 12px;font-size:11.5px;margin-right:4px;">Approve</button>
-              <button class="jh-btn jh-btn-ghost deactivate-btn" data-id="${u.id}" style="padding:5px 10px;font-size:11.5px;">Reject</button>
-            </td>
-          </tr>`).join("")}
-        </tbody>
-      </table>
-    </div>` : ""}
-
-    <!-- ── ALL USERS ───────────────────────────────────── -->
     <div class="jh-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-        <div class="jh-section-title" style="margin:0;">All Users (${(users||[]).length})</div>
-        <input id="userSearch" class="login-input" placeholder="Search name or email…" style="width:220px;padding:6px 12px;font-size:12.5px;">
-      </div>
-      <div style="overflow-x:auto;">
-      <table class="jh-table" id="usersTable">
+      <table class="jh-table">
         <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody>
-          ${(users||[]).map((u) => `
-            <tr data-name="${escapeHtml((u.full_name||"").toLowerCase())}" data-email="${escapeHtml((u.email||"").toLowerCase())}">
+          ${(users || []).map((u) => `
+            <tr>
+              <td>${escapeHtml(u.full_name)}</td>
+              <td>${escapeHtml(u.email)}</td>
               <td>
-                <div style="font-weight:600;font-size:13.5px;">${escapeHtml(u.full_name||"—")}</div>
-                <div style="font-size:11px;color:var(--text-faint);">${u.id===CURRENT_PROFILE.id?"(you)":""}</div>
-              </td>
-              <td style="font-size:13px;">${escapeHtml(u.email||"—")}</td>
-              <td>
-                <select class="login-input role-select" data-id="${u.id}" style="width:auto;padding:4px 8px;font-size:12px;" ${u.id===CURRENT_PROFILE.id?"disabled":""}>
-                  ${JH_ROLES_LIST.map(r=>`<option value="${r}" ${u.role===r?"selected":""}>${r.replace(/_/g," ")}</option>`).join("")}
+                <select class="login-input role-select" data-id="${u.id}" style="width:auto;padding:5px 8px;font-size:12px;" ${u.id === CURRENT_PROFILE.id ? "disabled" : ""}>
+                  ${["student","teacher","principal","trust_member","admin","super_admin"].map((r) => `<option value="${r}" ${u.role === r ? "selected" : ""}>${r.replace("_"," ")}</option>`).join("")}
                 </select>
               </td>
-              <td>${statusBadge(u.status)}</td>
-              <td style="white-space:nowrap;">
-                <button class="jh-btn jh-btn-ghost edit-btn" data-id="${u.id}" data-name="${escapeHtml(u.full_name||"")}" data-email="${escapeHtml(u.email||"")}" style="padding:4px 9px;font-size:11.5px;margin-right:3px;" title="Edit name/email">✏️</button>
-                <button class="jh-btn jh-btn-ghost reset-pw-btn" data-id="${u.id}" style="padding:4px 9px;font-size:11.5px;margin-right:3px;" title="Force password reset">🔑</button>
-                ${u.status==="active"
-                  ? `<button class="jh-btn jh-btn-ghost deactivate-btn" data-id="${u.id}" style="padding:4px 9px;font-size:11.5px;margin-right:3px;" title="Deactivate">⏸</button>`
-                  : `<button class="jh-btn jh-btn-ghost activate-btn" data-id="${u.id}" style="padding:4px 9px;font-size:11.5px;margin-right:3px;" title="Activate / Approve">▶</button>`
+              <td>${u.status === "active" ? '<span class="jh-badge jh-badge-green">Active</span>' : u.status === "pending" ? '<span class="jh-badge jh-badge-gold">Pending</span>' : '<span class="jh-badge jh-badge-gray">Inactive</span>'}</td>
+              <td>
+                <button class="jh-btn jh-btn-ghost reset-pw-btn" data-id="${u.id}" style="padding:5px 10px;font-size:11.5px;margin-right:4px;">Force Reset</button>
+                ${u.status === "active"
+                  ? `<button class="jh-btn jh-btn-ghost deactivate-btn" data-id="${u.id}" style="padding:5px 10px;font-size:11.5px;">Deactivate</button>`
+                  : `<button class="jh-btn jh-btn-ghost activate-btn" data-id="${u.id}" style="padding:5px 10px;font-size:11.5px;">Activate</button>`
                 }
-                ${u.id!==CURRENT_PROFILE.id?`<button class="jh-btn jh-btn-ghost delete-btn" data-id="${u.id}" data-name="${escapeHtml(u.full_name||u.email||"this user")}" style="padding:4px 9px;font-size:11.5px;color:#ff453a;" title="Delete user">🗑</button>`:""}
               </td>
             </tr>`).join("")}
         </tbody>
       </table>
-      </div>
-    </div>
-
-    <!-- ── EDIT USER MODAL ─────────────────────────────── -->
-    <div id="editUserModal" style="display:none;position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.75);backdrop-filter:blur(18px);align-items:center;justify-content:center;padding:24px;">
-      <div style="background:rgba(22,22,26,.96);border:1px solid rgba(255,255,255,.14);border-radius:20px;width:min(96%,480px);padding:32px;position:relative;">
-        <button id="editModalClose" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:34px;height:34px;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-        <div style="font-size:16px;font-weight:700;margin-bottom:20px;">Edit User</div>
-        <input type="hidden" id="editUserId">
-        <div style="margin-bottom:12px;">
-          <label style="font-size:12px;color:var(--text-faint);display:block;margin-bottom:4px;">Full Name</label>
-          <input id="editUserName" class="login-input" style="width:100%;box-sizing:border-box;">
-        </div>
-        <div style="margin-bottom:20px;">
-          <label style="font-size:12px;color:var(--text-faint);display:block;margin-bottom:4px;">Email Address</label>
-          <input id="editUserEmail" class="login-input" type="email" style="width:100%;box-sizing:border-box;">
-        </div>
-        <div id="editUserMsg" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:10px;font-size:13px;"></div>
-        <button id="editUserSave" class="jh-btn jh-btn-primary" style="width:100%;padding:11px;">Save Changes</button>
-      </div>
     </div>
   `;
 
-  /* ---- Search filter ---- */
-  document.getElementById("userSearch").addEventListener("input", (e) => {
-    const q = e.target.value.toLowerCase();
-    document.querySelectorAll("#usersTable tbody tr").forEach(tr => {
-      tr.style.display = (!q || tr.dataset.name.includes(q) || tr.dataset.email.includes(q)) ? "" : "none";
-    });
-  });
-
-  /* ---- Create User ---- */
-  document.getElementById("cuSubmitBtn").addEventListener("click", async () => {
-    const name  = document.getElementById("cuName").value.trim();
-    const email = document.getElementById("cuEmail").value.trim();
-    const pw    = document.getElementById("cuPassword").value;
-    const role  = document.getElementById("cuRole").value;
-    const msgEl = document.getElementById("createUserMsg");
-    const btn   = document.getElementById("cuSubmitBtn");
-
-    if (!name || !email || !pw) { showMsg(msgEl, "Please fill in all required fields.", false); return; }
-    if (pw.length < 8)          { showMsg(msgEl, "Password must be at least 8 characters.", false); return; }
-
-    btn.disabled = true; btn.textContent = "Creating…";
-    msgEl.style.display = "none";
-
-    /* ------------------------------------------------------------
-       IMPORTANT: This calls a server-side Edge Function, NOT
-       sb.auth.signUp(). signUp() signs the CURRENT BROWSER in as
-       the newly created user, which would log the Super Admin out
-       of their own session every time they create someone — that
-       was the previous (broken) behavior here.
-
-       The Edge Function uses the service-role key (server-side
-       only) to call the Admin API instead, which creates the auth
-       user AND the profile row without affecting the caller's
-       session at all. See:
-       /supabase/functions/admin-create-user/index.ts
-       ------------------------------------------------------------ */
-    const { data: sessionData } = await sb.auth.getSession();
-    const accessToken = sessionData?.session?.access_token;
-
-    if (!accessToken) {
-      showMsg(msgEl, "Your session has expired — please refresh and log in again.", false);
-      btn.disabled = false; btn.textContent = "Create Account";
-      return;
-    }
-
-    try {
-      const res = await fetch(`${SUPABASE_URL}/functions/v1/admin-create-user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ name, email, password: pw, role }),
-      });
-      const result = await res.json();
-
-      if (!res.ok || result.error) {
-        showMsg(msgEl, result.error || "Failed to create account.", false);
-        btn.disabled = false; btn.textContent = "Create Account";
-        return;
-      }
-
-      showMsg(msgEl, `✅ Account created for ${name} (${role.replace(/_/g," ")}). They must change their password on first login.`, true);
-      document.getElementById("cuName").value = "";
-      document.getElementById("cuEmail").value = "";
-      document.getElementById("cuPassword").value = "";
-      setTimeout(() => renderUsers(content), 1800);
-    } catch (err) {
-      showMsg(msgEl, "Network error contacting admin-create-user function: " + err.message, false);
-    }
-    btn.disabled = false; btn.textContent = "Create Account";
-  });
-
-  /* ---- Role change ---- */
   content.querySelectorAll(".role-select").forEach((sel) => sel.addEventListener("change", async () => {
     await sb.from("profiles").update({ role: sel.value }).eq("id", sel.dataset.id);
     await logActivity("user.role_changed", "profiles", sel.dataset.id, { new_role: sel.value });
   }));
-
-  /* ---- Approve (pending → active) ---- */
-  content.querySelectorAll(".approve-btn").forEach((btn) => btn.addEventListener("click", async () => {
-    await sb.from("profiles").update({ status: "active" }).eq("id", btn.dataset.id);
-    await logActivity("user.approved", "profiles", btn.dataset.id);
-    renderUsers(content);
-  }));
-
-  /* ---- Activate ---- */
   content.querySelectorAll(".activate-btn").forEach((btn) => btn.addEventListener("click", async () => {
     await sb.from("profiles").update({ status: "active" }).eq("id", btn.dataset.id);
     await logActivity("user.activated", "profiles", btn.dataset.id);
     renderUsers(content);
   }));
-
-  /* ---- Deactivate ---- */
   content.querySelectorAll(".deactivate-btn").forEach((btn) => btn.addEventListener("click", async () => {
     await sb.from("profiles").update({ status: "inactive" }).eq("id", btn.dataset.id);
     await logActivity("user.deactivated", "profiles", btn.dataset.id);
     renderUsers(content);
   }));
-
-  /* ---- Force password reset ---- */
   content.querySelectorAll(".reset-pw-btn").forEach((btn) => btn.addEventListener("click", async () => {
     await sb.from("profiles").update({ must_change_password: true }).eq("id", btn.dataset.id);
     await logActivity("user.forced_password_reset", "profiles", btn.dataset.id);
-    alert("✅ Done — that user must set a new password on their next login.");
+    alert("That user will be required to set a new password on their next login.");
   }));
-
-  /* ---- Delete user ---- */
-  content.querySelectorAll(".delete-btn").forEach((btn) => btn.addEventListener("click", async () => {
-    if (!confirm(`Delete "${btn.dataset.name}"?\n\nThis removes them from the profiles table. Their Supabase Auth account remains (sign in to Supabase Auth to remove it) but they will lose all portal access immediately.`)) return;
-    await sb.from("profiles").delete().eq("id", btn.dataset.id);
-    await logActivity("user.deleted", "profiles", btn.dataset.id);
-    renderUsers(content);
-  }));
-
-  /* ---- Edit user (name + email in profiles) ---- */
-  const editModal = document.getElementById("editUserModal");
-  content.querySelectorAll(".edit-btn").forEach((btn) => btn.addEventListener("click", () => {
-    document.getElementById("editUserId").value   = btn.dataset.id;
-    document.getElementById("editUserName").value  = btn.dataset.name;
-    document.getElementById("editUserEmail").value = btn.dataset.email;
-    document.getElementById("editUserMsg").style.display = "none";
-    editModal.style.display = "flex";
-  }));
-  document.getElementById("editModalClose").addEventListener("click", () => { editModal.style.display = "none"; });
-  document.getElementById("editUserSave").addEventListener("click", async () => {
-    const id    = document.getElementById("editUserId").value;
-    const name  = document.getElementById("editUserName").value.trim();
-    const email = document.getElementById("editUserEmail").value.trim();
-    const msgEl = document.getElementById("editUserMsg");
-    if (!name || !email) { showMsg(msgEl, "Name and email are required.", false); return; }
-    const { error } = await sb.from("profiles").update({ full_name: name, email }).eq("id", id);
-    if (error) { showMsg(msgEl, "Error: " + error.message, false); return; }
-    await logActivity("user.edited", "profiles", id, { full_name: name, email });
-    editModal.style.display = "none";
-    renderUsers(content);
-  });
-}
-
-function showMsg(el, text, success) {
-  el.style.display = "block";
-  el.style.background = success ? "rgba(48,209,88,.15)" : "rgba(255,69,58,.15)";
-  el.style.border = `1px solid ${success ? "rgba(48,209,88,.3)" : "rgba(255,69,58,.3)"}`;
-  el.style.color = success ? "#30d158" : "#ff453a";
-  el.textContent = text;
 }
 
 /* ---------------------------------------------------------- */
