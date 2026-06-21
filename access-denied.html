@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Access Denied — JH+ Shaheen Academy</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/assets/portal-login.css">
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="login-card" style="text-align:center;">
+    <div class="login-logo">
+      <div class="mark" style="color:var(--red);border-color:rgba(255,69,58,.4);background:linear-gradient(145deg, rgba(255,69,58,.2), rgba(255,69,58,.05));">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+      </div>
+      <div class="brandname">Access Denied</div>
+    </div>
+
+    <p style="color:var(--text-dim);font-size:14px;line-height:1.65;margin-bottom:26px;">
+      Your account does not have permission to view this page. If you believe this is a mistake, please contact your administrator.
+    </p>
+
+    <button class="login-btn login-btn-primary" onclick="goHome()" style="margin-bottom:12px;">Go to My Dashboard</button>
+    <button class="login-btn-google" onclick="signOutAndLeave()">Sign Out</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script>
+  async function goHome() {
+    const profile = await jhGetProfile();
+    if (profile && JH_ROLE_HOME[profile.role]) {
+      window.location.href = JH_ROLE_HOME[profile.role];
+    } else {
+      window.location.href = "/index.html";
+    }
+  }
+  async function signOutAndLeave() {
+    await jhLogout("/index.html");
+  }
+</script>
+</body>
+</html>
