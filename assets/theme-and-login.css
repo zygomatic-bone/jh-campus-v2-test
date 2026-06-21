@@ -76,6 +76,78 @@ html[data-theme="light"] .section-head h2{
 }
 
 /* ============================================================
+   HERO THEME LOCK
+   ------------------------------------------------------------
+   The following four hero components PERMANENTLY keep their
+   dark-premium appearance regardless of active theme.
+   These rules use [data-theme="light"] scope and !important
+   to override any light-mode re-tinting.
+   ============================================================ */
+
+/* 1. Top Admissions Banner */
+html[data-theme="light"] #admBanner {
+  background: linear-gradient(90deg,rgba(48,209,88,.22),rgba(10,132,255,.22)) !important;
+  border-bottom: 1px solid rgba(255,255,255,.12) !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] #admBanner a,
+html[data-theme="light"] #admBanner span:not(.dotlive) {
+  color: #ffffff !important;
+}
+
+/* 2. Navbar Glass Container */
+html[data-theme="light"] nav#nav {
+  background: rgba(20,20,22,.45) !important;
+  border-color: rgba(255,255,255,.08) !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] nav#nav.scrolled {
+  background: rgba(10,10,12,.78) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35) !important;
+}
+html[data-theme="light"] nav#nav .navlink,
+html[data-theme="light"] nav#nav .brand {
+  color: #ffffff !important;
+}
+
+/* 3. Hero Statistics Glass Panel */
+html[data-theme="light"] #jhHeroStats,
+html[data-theme="light"] .hero-stats {
+  background: var(--line) !important;
+  border-color: var(--line) !important;
+}
+html[data-theme="light"] #jhHeroStats .stat,
+html[data-theme="light"] .hero-stats .stat {
+  background: rgba(255,255,255,.025) !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] #jhHeroStats .stat-num,
+html[data-theme="light"] .hero-stats .stat-num {
+  color: #ffffff !important;
+}
+html[data-theme="light"] #jhHeroStats .stat-lbl,
+html[data-theme="light"] .hero-stats .stat-lbl {
+  color: rgba(255,255,255,.55) !important;
+}
+
+/* 4. Hero CTA Area */
+html[data-theme="light"] .hero-ctas .btn-primary {
+  background: var(--blue) !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] .hero-ctas .btn-secondary {
+  background: rgba(255,255,255,.08) !important;
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+html[data-theme="light"] .hero-ctas .btn-gold {
+  background: rgba(212,168,87,.18) !important;
+  color: var(--gold) !important;
+  border-color: rgba(212,168,87,.35) !important;
+}
+
+/* ============================================================
    THEME TOGGLE — premium glass pill, top-left of navbar
    ============================================================ */
 .theme-toggle{

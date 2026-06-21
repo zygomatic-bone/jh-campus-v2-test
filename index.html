@@ -434,7 +434,7 @@
 <!-- LOADING SCREEN -->
 <div id="loader">
   <div class="loader-mark">J</div>
-  <div class="loader-name">Jamia Shaheen Academy</div>
+  <div class="loader-name">Jamia Hifz Plus</div>
   <div class="loader-bar"><span></span></div>
 </div>
 
@@ -459,7 +459,7 @@
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         </span>
       </button>
-      <div class="brand"><div class="mark">J</div>Shaheen Academy</div>
+      <div class="brand"><div class="mark">J</div>Jamia Hifz Plus</div>
     </div>
     <div class="navlinks">
       <a href="#about">About</a>
@@ -954,7 +954,7 @@
   <div class="section-head">
     <div class="eyebrow">Support the Academy</div>
     <h2>Your donation changes a life.</h2>
-    <p>Jame ul Uloom Shaheen Academy relies on the generosity of donors to fund scholarships, facilities, and daily operations for students who need it most.</p>
+    <p>Jamia Hifz Plus relies on the generosity of donors to fund scholarships, facilities, and daily operations for students who need it most.</p>
   </div>
   <div class="wrap" style="text-align:center;">
     <button class="btn-gold" style="font-size:16px;padding:15px 30px;" onclick="openDonate()">&#x2665; Donate Now</button>
@@ -1010,7 +1010,7 @@
 <footer>
   <div class="footgrid">
     <div class="footcol">
-      <h5>Jame ul Uloom Shaheen Academy</h5>
+      <h5>Jamia Hifz Plus</h5>
       <div>Jamia Shaheen, Bannikuppa, Bengaluru</div>
       <div>Associated with Jamia Masjid Bangalore</div>
       <div class="foot-social">
@@ -1044,7 +1044,7 @@
     </div>
   </div>
   <div class="foot-tagline">Faith &bull; Character &bull; Academic Excellence</div>
-  <div class="footnote">&copy; 2026 Jame ul Uloom Shaheen Academy. All rights reserved.</div>
+  <div class="footnote">&copy; 2026 Jamia Hifz Plus. All rights reserved.</div>
 </footer>
 
 <!-- RECTOR MESSAGE MODAL -->
@@ -1238,12 +1238,12 @@ function copyUpi(){
 function downloadProspectus(e){
   e.preventDefault();
   // Replace with real file, e.g. window.open('files/prospectus.pdf','_blank');
-  window.open('https://wa.me/919642063766?text='+encodeURIComponent('Please share the Jamia Shaheen Academy prospectus.'),'_blank');
+  window.open('https://wa.me/919642063766?text='+encodeURIComponent('Please share the Jamia Hifz Plus prospectus.'),'_blank');
 }
 function downloadForm(e){
   e.preventDefault();
   // Replace with real file, e.g. window.open('files/admission-form.pdf','_blank');
-  window.open('https://wa.me/919642063766?text='+encodeURIComponent('Please share the Jamia Shaheen Academy admission form.'),'_blank');
+  window.open('https://wa.me/919642063766?text='+encodeURIComponent('Please share the Jamia Hifz Plus admission form.'),'_blank');
 }
 
 /* ESC closes overlays */
@@ -1263,7 +1263,7 @@ function submitEnquiry(){
   const cat=document.getElementById('fCategory').value;
   const course=document.getElementById('fCourse').value;
   if(!name||!dob||!phone||!cat||!course){ alert('Please fill in all required fields (marked with *).'); return; }
-  const msg = encodeURIComponent('*New Enquiry - Shaheen Academy*\n\nName: '+name+'\nDOB: '+dob+'\nPhone: '+phone+'\nEmail: '+(document.getElementById('fEmail').value||'--')+'\nCategory: '+cat+'\nCourse: '+course+'\nMessage: '+(document.getElementById('fMsg').value||'--'));
+  const msg = encodeURIComponent('*New Enquiry - Jamia Hifz Plus*\n\nName: '+name+'\nDOB: '+dob+'\nPhone: '+phone+'\nEmail: '+(document.getElementById('fEmail').value||'--')+'\nCategory: '+cat+'\nCourse: '+course+'\nMessage: '+(document.getElementById('fMsg').value||'--'));
   window.open('https://wa.me/919642063766?text='+msg,'_blank');
   document.getElementById('enqFormWrap').style.display='none';
   document.getElementById('enqSuccess').style.display='block';
